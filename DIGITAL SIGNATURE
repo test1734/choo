@@ -1,0 +1,46 @@
+import java.security.*;
+import java.util.Scanner;
+
+public class ex7 {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
+        kpg.initialize(1024, SecureRandom.getInstance("SHA1PRNG"));
+        KeyPair kp = kpg.generateKeyPair();
+
+        System.out.print("Enter the message to sign: ");
+        String msg = sc.nextLine();
+        byte[] sigBytes = sign(kp.getPrivate(), msg);
+
+        System.out.println("Signature Generated");
+        System.out.println(verify(kp.getPublic(), msg, sigBytes) 
+            ? "Valid Signature\nVerification Status: True" 
+            : "Invalid Signature\nVerification Status: False");
+
+        System.out.print("Enter the message to verify: ");
+        String newMsg = sc.nextLine();
+        System.out.println("Signature Generated");
+        System.out.println(verify(kp.getPublic(), newMsg, sigBytes) 
+            ? "Valid Signature\nVerification Status: True" 
+            : "Invalid Signature\nVerification Status: False");
+
+        sc.close();
+    }
+
+    static byte[] sign(PrivateKey key, String msg) throws Exception {
+        Signature s = Signature.getInstance("SHA1withDSA");
+        s.initSign(key);
+        s.update(msg.getBytes());
+        return s.sign();
+    }
+
+    static boolean verify(PublicKey key, String msg, byte[] sigBytes) throws Exception {
+        Signature s = Signature.getInstance("SHA1withDSA");
+        s.initVerify(key);
+        s.update(msg.getBytes());
+        return s.verify(sigBytes);
+    }
+}
+
+
