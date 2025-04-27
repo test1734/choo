@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RSA Simple</title>
+</head>
+<body>
+
+<h2>RSA Encryption (Very Simple)</h2>
+
+<p>p: <input id="p"></p>
+<p>q: <input id="q"></p>
+<p>e: <input id="e"></p>
+<p>Message (m): <input id="m"></p>
+
+<button onclick="rsa()">Encrypt & Decrypt</button>
+
+<p>n = <span id="n"></span></p>
+<p>d = <span id="d"></span></p>
+<p>Encrypted = <span id="c"></span></p>
+<p>Decrypted = <span id="dm"></span></p>
+
+<script>
+function modPow(a, b, mod) {
+  let res = 1;
+  a = a % mod;
+  while (b > 0) {
+    if (b % 2) res = (res * a) % mod;
+    a = (a * a) % mod;
+    b = Math.floor(b / 2);
+  }
+  return res;
+}
+
+function modInverse(e, phi) {
+  let d = 1;
+  while ((d * e) % phi !== 1) d++;
+  return d;
+}
+
+function rsa() {
+  let p = +document.getElementById('p').value;
+  let q = +document.getElementById('q').value;
+  let e = +document.getElementById('e').value;
+  let m = +document.getElementById('m').value;
+
+  let n = p * q;
+  let phi = (p-1)*(q-1);
+  let d = modInverse(e, phi);
+
+  let c = modPow(m, e, n);
+  let decrypted = modPow(c, d, n);
+
+  document.getElementById('n').innerText = n;
+  document.getElementById('d').innerText = d;
+  document.getElementById('c').innerText = c;
+  document.getElementById('dm').innerText = decrypted;
+}
+</script>
+
+</body>
+</html>
