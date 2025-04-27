@@ -1,0 +1,65 @@
+import java.util.Scanner;
+public class MatrixCipherSimple {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("1. Encryption\n2. Decryption");
+        int choice = sc.nextInt(); sc.nextLine();
+        System.out.print("Enter text: ");
+        String text = sc.nextLine().toLowerCase();
+        System.out.print("Enter rows and columns: ");
+        int r = sc.nextInt(), c = sc.nextInt();
+
+        System.out.println("Enter key matrix:");
+        int[][] key = new int[r][c];
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+                key[i][j] = sc.nextInt();
+
+        if (choice == 1)
+            System.out.println("Result: " + encrypt(text, key, r, c));
+        else
+            System.out.println("Result: " + decrypt(text, key, r, c));
+
+        sc.close();
+    }
+
+    static String encrypt(String text, int[][] key, int r, int c) {
+        StringBuilder res = new StringBuilder();
+        while (text.length() % c != 0) text += 'x';
+
+        for (int i = 0; i < text.length(); i += c)
+            for (int row = 0; row < r; row++) {
+                int sum = 0;
+                for (int col = 0; col < c; col++)
+                    sum += (text.charAt(i + col) - 'a') * key[row][col];
+                res.append((char) (sum % 26 + 'a'));
+            }
+        return res.toString();
+    }
+
+    static String decrypt(String text, int[][] key, int r, int c) {
+        int det = (key[0][0]*key[1][1] - key[0][1]*key[1][0] + 26) % 26;
+        int invDet = 0;
+        for (int i = 1; i < 26; i++)
+            if ((det * i) % 26 == 1) { invDet = i; break; }
+
+        int[][] inv = {
+            { key[1][1], (26 - key[0][1]) % 26 },
+            { (26 - key[1][0]) % 26, key[0][0] }
+        };
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+                inv[i][j] = (inv[i][j] * invDet) % 26;
+
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < text.length(); i += r)
+            for (int row = 0; row < r; row++) {
+                int sum = 0;
+                for (int col = 0; col < c; col++)
+                    sum += (text.charAt(i + col) - 'a') * inv[row][col];
+                res.append((char) (sum % 26 + 'a'));
+            }
+        return res.toString();
+    }
+}
