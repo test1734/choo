@@ -1,0 +1,30 @@
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the Aadhar Number: ");
+        String aadhar = sc.nextLine().replaceAll("\\s+", "");
+        if (aadhar.length() != 12) 
+        { 
+            System.out.println("Invalid Aadhar Number"); 
+            return; 
+        }
+        System.out.print("Enter the key: ");
+        String key = sc.nextLine();
+        
+        String plain = aadhar.replaceAll("(.{4})", "$1 ").trim();
+        SecretKeySpec skey = new SecretKeySpec(Arrays.copyOf(key.getBytes("UTF-8"), 16), "AES");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+
+        System.out.println("\nPlain Text : " + plain);
+        cipher.init(Cipher.ENCRYPT_MODE, skey);
+        String enc = Base64.getEncoder().encodeToString(cipher.doFinal(plain.getBytes("UTF-8")));
+        System.out.println("Encrypted Text : " + enc);
+        cipher.init(Cipher.DECRYPT_MODE, skey);
+        String dec = new String(cipher.doFinal(Base64.getDecoder().decode(enc)));
+        System.out.println("Decrypted Text : " + dec);
+    }
+}
