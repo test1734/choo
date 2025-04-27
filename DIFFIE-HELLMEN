@@ -1,0 +1,26 @@
+import java.util.Scanner;
+
+import java.math. BigInteger;
+
+public class ex5
+
+public static void main(String[] args) { Scanner sc = new Scanner(System.in);
+
+ System.out.print("Enter the value of q: "); int q=sc.nextInt();
+
+System.out.print("Enter the primitive root: "); int gsc.nextInt();
+
+System.out.print("Enter the private key of User A: "); int a = sc.nextInt();
+
+System.out.print("Enter the private key of User B: "); int b=sc.nextInt();
+
+ int A=(int) (Math.pow(g, a) % q); int B = (int) (Math.pow(g, b) % q);
+
+int keyA = (int) (Math.pow(B, a) % q); int keyB = (int) (Math.pow(A, b) % q);
+ System.out.println("Shared Secret Key is " + keyA);
+
+sc.close();
+
+}
+
+}
