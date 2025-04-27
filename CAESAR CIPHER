@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+public class CaesarCipher {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int choice = sc.nextInt(); sc.nextLine();
+        int key = 3;
+
+        String text = sc.nextLine();
+
+        String result = (choice == 1) ? encrypt(text, key) : decrypt(text, key);
+        System.out.println("Result: " + result);
+
+        sc.close();
+    }
+
+    static String encrypt(String text, int key) {
+        StringBuilder res = new StringBuilder();
+        for (char c : text.toCharArray())
+            res.append((char) ((c - 'a' + key) % 26 + 'A'));
+        return res.toString();
+    }
+
+    static String decrypt(String text, int key) {
+        StringBuilder res = new StringBuilder();
+        for (char c : text.toCharArray())
+            res.append((char) ((c - 'A' - key + 26) % 26 + 'a'));
+        return res.toString();
+    }
+}
