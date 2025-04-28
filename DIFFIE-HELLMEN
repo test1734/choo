@@ -11,7 +11,7 @@ public static void main(String[] args) {
  int q=sc.nextInt();
 
 System.out.print("Enter the primitive root: "); 
-int gsc.nextInt();
+int g=sc.nextInt();
 
 System.out.print("Enter the private key of User A: ");
  int a = sc.nextInt();
